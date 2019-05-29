@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lmh.mapper.BrandMapper">
+  <resultMap id="BaseResultMap" type="com.lmh.pojo.Brand">
+    <id column="brand_id" jdbcType="BIGINT" property="brandId" />
+    <result column="brand_name" jdbcType="VARCHAR" property="brandName" />
+    <result column="telephone" jdbcType="VARCHAR" property="telephone" />
+    <result column="brand_web" jdbcType="VARCHAR" property="brandWeb" />
+    <result column="brand_logo" jdbcType="VARCHAR" property="brandLogo" />
+    <result column="brand_desc" jdbcType="VARCHAR" property="brandDesc" />
+    <result column="brand_status" jdbcType="INTEGER" property="brandStatus" />
+    <result column="brand_order" jdbcType="INTEGER" property="brandOrder" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    brand_id, brand_name, telephone, brand_web, brand_logo, brand_desc, brand_status, 
+    brand_order, modified_time
+  </sql>
+  <select id="selectByExample" parameterType="com.lmh.pojo.BrandExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from sy_brand_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sy_brand_info
+    where brand_id = #{brandId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sy_brand_info
+    where brand_id = #{brandId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.lmh.pojo.BrandExample">
+    delete from sy_brand_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lmh.pojo.Brand">
+    insert into sy_brand_info (brand_id, brand_name, telephone, 
+      brand_web, brand_logo, brand_desc, 
+      brand_status, brand_order, modified_time
+      )
+    values (#{brandId,jdbcType=BIGINT}, #{brandName,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR}, 
+      #{brandWeb,jdbcType=VARCHAR}, #{brandLogo,jdbcType=VARCHAR}, #{brandDesc,jdbcType=VARCHAR}, 
+      #{brandStatus,jdbcType=INTEGER}, #{brandOrder,jdbcType=INTEGER}, #{modifiedTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lmh.pojo.Brand">
+    insert into sy_brand_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="brandId != null">
+        brand_id,
+      </if>
+      <if test="brandName != null">
+        brand_name,
+      </if>
+      <if test="telephone != null">
+        telephone,
+      </if>
+      <if test="brandWeb != null">
+        brand_web,
+      </if>
+      <if test="brandLogo != null">
+        brand_logo,
+      </if>
+      <if test="brandDesc != null">
+        brand_desc,
+      </if>
+      <if test="brandStatus != null">
+        brand_status,
+      </if>
+      <if test="brandOrder != null">
+        brand_order,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="brandId != null">
+        #{brandId,jdbcType=BIGINT},
+      </if>
+      <if test="brandName != null">
+        #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null">
+        #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="brandWeb != null">
+        #{brandWeb,jdbcType=VARCHAR},
+      </if>
+      <if test="brandLogo != null">
+        #{brandLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="brandDesc != null">
+        #{brandDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="brandStatus != null">
+        #{brandStatus,jdbcType=INTEGER},
+      </if>
+      <if test="brandOrder != null">
+        #{brandOrder,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lmh.pojo.BrandExample" resultType="java.lang.Long">
+    select count(*) from sy_brand_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update sy_brand_info
+    <set>
+      <if test="record.brandId != null">
+        brand_id = #{record.brandId,jdbcType=BIGINT},
+      </if>
+      <if test="record.brandName != null">
+        brand_name = #{record.brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.telephone != null">
+        telephone = #{record.telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.brandWeb != null">
+        brand_web = #{record.brandWeb,jdbcType=VARCHAR},
+      </if>
+      <if test="record.brandLogo != null">
+        brand_logo = #{record.brandLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.brandDesc != null">
+        brand_desc = #{record.brandDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.brandStatus != null">
+        brand_status = #{record.brandStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.brandOrder != null">
+        brand_order = #{record.brandOrder,jdbcType=INTEGER},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update sy_brand_info
+    set brand_id = #{record.brandId,jdbcType=BIGINT},
+      brand_name = #{record.brandName,jdbcType=VARCHAR},
+      telephone = #{record.telephone,jdbcType=VARCHAR},
+      brand_web = #{record.brandWeb,jdbcType=VARCHAR},
+      brand_logo = #{record.brandLogo,jdbcType=VARCHAR},
+      brand_desc = #{record.brandDesc,jdbcType=VARCHAR},
+      brand_status = #{record.brandStatus,jdbcType=INTEGER},
+      brand_order = #{record.brandOrder,jdbcType=INTEGER},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lmh.pojo.Brand">
+    update sy_brand_info
+    <set>
+      <if test="brandName != null">
+        brand_name = #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null">
+        telephone = #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="brandWeb != null">
+        brand_web = #{brandWeb,jdbcType=VARCHAR},
+      </if>
+      <if test="brandLogo != null">
+        brand_logo = #{brandLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="brandDesc != null">
+        brand_desc = #{brandDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="brandStatus != null">
+        brand_status = #{brandStatus,jdbcType=INTEGER},
+      </if>
+      <if test="brandOrder != null">
+        brand_order = #{brandOrder,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where brand_id = #{brandId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lmh.pojo.Brand">
+    update sy_brand_info
+    set brand_name = #{brandName,jdbcType=VARCHAR},
+      telephone = #{telephone,jdbcType=VARCHAR},
+      brand_web = #{brandWeb,jdbcType=VARCHAR},
+      brand_logo = #{brandLogo,jdbcType=VARCHAR},
+      brand_desc = #{brandDesc,jdbcType=VARCHAR},
+      brand_status = #{brandStatus,jdbcType=INTEGER},
+      brand_order = #{brandOrder,jdbcType=INTEGER},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where brand_id = #{brandId,jdbcType=BIGINT}
+  </update>
+</mapper>

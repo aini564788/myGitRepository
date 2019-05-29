@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+
+
+    <!-- =========================================================
+         Shiro Core Components - Not Spring Specific
+         ========================================================= -->
+    <!-- Shiro's main business-tier object for web-enabled applications
+         (use DefaultSecurityManager instead when there is no web environment)-->
+    <!--配置安全管理器 -->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <!-- Single realm app.  If you have multiple realms, use the 'realms' property instead. -->
+        <property name="sessionMode" value="native"/>
+        <!--配置自定义realm 主要用来查询数据源-->
+       <property name="realm" ref="myRealm"/>
+        <property name="rememberMeManager" ref="rememberMeManager"/>
+    </bean>
+
+
+    <!-- Used by the SecurityManager to access security data (users, roles, etc).
+         Many other realm implementations can be used too (PropertiesRealm,
+         LdapRealm, etc. -->
+    <!--配合自定义realm  主要用来查询数据源 -->
+  <bean id="myRealm" class="com.lmh.realm.MyRealm">
+      <!--注入凭证匹配器-->
+        <property name="credentialsMatcher">
+          <!--  &lt;!&ndash; The 'bootstrapDataPopulator' Sha256 hashes the password
+                 (using the username as the salt) then base64 encodes it: &ndash;&gt;
+            &lt;!&ndash;配置密码凭证器 &ndash;&gt;-->
+            <bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+               <!-- &lt;!&ndash;使用MD5加密算法&ndash;&gt;-->
+                <property name="hashAlgorithmName" value="MD5"/>
+              <!--  &lt;!&ndash; true means hex encoded, false means base64 encoded &ndash;&gt;
+                &lt;!&ndash;MD5加密的次数&ndash;&gt;-->
+                <property name="hashIterations" value="1024"/>
+            </bean>
+        </property>
+    </bean>
+    <!-- 会话Cookie模板 -->
+    <bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+        <constructor-arg value="rememberMe"/>
+        <property name="httpOnly" value="true"/>
+        <property name="maxAge" value="#{60*60*1000}"/><!-- 30天 -->
+    </bean>
+    <!-- rememberMe管理器 -->
+    <bean id="rememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager">
+        <property name="cookie" ref="rememberMeCookie"/>
+        <!-- cipherKey是加密rememberMe Cookie的密匙，默认AES算法 -->
+        <property name="cipherKey" value="#{T(org.apache.shiro.codec.Base64).decode('4AvVhmFLUs0KTA3Kprsdag==')}"/>
+    </bean>
+
+
+    <!-- Define the Shiro Filter here (as a FactoryBean) instead of directly in web.xml -
+         web.xml uses the DelegatingFilterProxy to access this bean.  This allows us
+         to wire things with more control as well utilize nice Spring things such as
+         PropertiesPlaceholderConfigurer and abstract beans or anything else we might need: -->
+
+    <!--配置shiro核心过滤器  bean的id要和web.xml里面对应-->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <!--注入安全管理器;securityManager-->
+        <property name="securityManager" ref="securityManager"/>
+        <!--配置登录界面  没有认证的时候回往该路径跳转-->
+        <property name="loginUrl" value="/"/>
+        <!--配置成功页面 登录成功后 跳转到的页面 也可以不配置 不配置的话默认跳转到上一个页面-->
+        <property name="successUrl" value="/index"/>
+        <!--配置没有权限的时候跳转大页面-->
+        <property name="unauthorizedUrl" value="/v/unauthorized"/>
+
+        <property name="filterChainDefinitions">
+            <value>
+                #anon表示不需要登录就可以访问
+
+                /static/** = anon
+                /imgCode=anon
+                #guest里面存放一些可以匿名访问的页面
+                /v/guest/** = anon
+                /userlogin=anon
+                #注销的过滤器
+                /logout=logout
+                /api/*/*=anon
+                # 其他的需要进行认证 authc需要进行认证
+                #api下的都放行
+                #user记住为或者登录都能访问
+                /**=user
+                #记住我不能访问我。
+            </value>
+        </property>
+    </bean>
+
+</beans>

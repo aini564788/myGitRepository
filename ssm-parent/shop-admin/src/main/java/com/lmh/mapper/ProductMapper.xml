@@ -1,0 +1,486 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lmh.mapper.ProductMapper">
+  <resultMap id="BaseResultMap" type="com.lmh.pojo.Product">
+    <id column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="bar_code" jdbcType="VARCHAR" property="barCode" />
+    <result column="brand_id" jdbcType="BIGINT" property="brandId" />
+    <result column="first_category_id" jdbcType="INTEGER" property="firstCategoryId" />
+    <result column="second_category_id" jdbcType="INTEGER" property="secondCategoryId" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="publish_status" jdbcType="INTEGER" property="publishStatus" />
+    <result column="audit_status" jdbcType="INTEGER" property="auditStatus" />
+    <result column="weight" jdbcType="REAL" property="weight" />
+    <result column="length" jdbcType="REAL" property="length" />
+    <result column="height" jdbcType="REAL" property="height" />
+    <result column="width" jdbcType="REAL" property="width" />
+    <result column="color_type" jdbcType="VARCHAR" property="colorType" />
+    <result column="production_date" jdbcType="TIMESTAMP" property="productionDate" />
+    <result column="indate" jdbcType="TIMESTAMP" property="indate" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    product_id, product_name, bar_code, brand_id, first_category_id, second_category_id, 
+    price, publish_status, audit_status, weight, length, height, width, color_type, production_date, 
+    descript, indate, modified_time
+  </sql>
+  <select id="selectByExample" parameterType="com.lmh.pojo.ProductExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from sy_product_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sy_product_info
+    where product_id = #{productId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sy_product_info
+    where product_id = #{productId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.lmh.pojo.ProductExample">
+    delete from sy_product_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lmh.pojo.Product">
+    insert into sy_product_info (product_id, product_name, bar_code, 
+      brand_id, first_category_id, second_category_id, 
+      price, publish_status, audit_status, 
+      weight, length, height, width, 
+      color_type, production_date, descript, 
+      indate, modified_time)
+    values (#{productId,jdbcType=BIGINT}, #{productName,jdbcType=VARCHAR}, #{barCode,jdbcType=VARCHAR}, 
+      #{brandId,jdbcType=BIGINT}, #{firstCategoryId,jdbcType=INTEGER}, #{secondCategoryId,jdbcType=INTEGER}, 
+      #{price,jdbcType=DECIMAL}, #{publishStatus,jdbcType=INTEGER}, #{auditStatus,jdbcType=INTEGER}, 
+      #{weight,jdbcType=REAL}, #{length,jdbcType=REAL}, #{height,jdbcType=REAL}, #{width,jdbcType=REAL}, 
+      #{colorType,jdbcType=VARCHAR}, #{productionDate,jdbcType=TIMESTAMP}, #{descript,jdbcType=VARCHAR}, 
+      #{indate,jdbcType=TIMESTAMP}, #{modifiedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lmh.pojo.Product">
+    insert into sy_product_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="productId != null">
+        product_id,
+      </if>
+      <if test="productName != null">
+        product_name,
+      </if>
+      <if test="barCode != null">
+        bar_code,
+      </if>
+      <if test="brandId != null">
+        brand_id,
+      </if>
+      <if test="firstCategoryId != null">
+        first_category_id,
+      </if>
+      <if test="secondCategoryId != null">
+        second_category_id,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="publishStatus != null">
+        publish_status,
+      </if>
+      <if test="auditStatus != null">
+        audit_status,
+      </if>
+      <if test="weight != null">
+        weight,
+      </if>
+      <if test="length != null">
+        length,
+      </if>
+      <if test="height != null">
+        height,
+      </if>
+      <if test="width != null">
+        width,
+      </if>
+      <if test="colorType != null">
+        color_type,
+      </if>
+      <if test="productionDate != null">
+        production_date,
+      </if>
+      <if test="descript != null">
+        descript,
+      </if>
+      <if test="indate != null">
+        indate,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="productId != null">
+        #{productId,jdbcType=BIGINT},
+      </if>
+      <if test="productName != null">
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="barCode != null">
+        #{barCode,jdbcType=VARCHAR},
+      </if>
+      <if test="brandId != null">
+        #{brandId,jdbcType=BIGINT},
+      </if>
+      <if test="firstCategoryId != null">
+        #{firstCategoryId,jdbcType=INTEGER},
+      </if>
+      <if test="secondCategoryId != null">
+        #{secondCategoryId,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="publishStatus != null">
+        #{publishStatus,jdbcType=INTEGER},
+      </if>
+      <if test="auditStatus != null">
+        #{auditStatus,jdbcType=INTEGER},
+      </if>
+      <if test="weight != null">
+        #{weight,jdbcType=REAL},
+      </if>
+      <if test="length != null">
+        #{length,jdbcType=REAL},
+      </if>
+      <if test="height != null">
+        #{height,jdbcType=REAL},
+      </if>
+      <if test="width != null">
+        #{width,jdbcType=REAL},
+      </if>
+      <if test="colorType != null">
+        #{colorType,jdbcType=VARCHAR},
+      </if>
+      <if test="productionDate != null">
+        #{productionDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="descript != null">
+        #{descript,jdbcType=VARCHAR},
+      </if>
+      <if test="indate != null">
+        #{indate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lmh.pojo.ProductExample" resultType="java.lang.Long">
+    select count(*) from sy_product_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update sy_product_info
+    <set>
+      <if test="record.productId != null">
+        product_id = #{record.productId,jdbcType=BIGINT},
+      </if>
+      <if test="record.productName != null">
+        product_name = #{record.productName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.barCode != null">
+        bar_code = #{record.barCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.brandId != null">
+        brand_id = #{record.brandId,jdbcType=BIGINT},
+      </if>
+      <if test="record.firstCategoryId != null">
+        first_category_id = #{record.firstCategoryId,jdbcType=INTEGER},
+      </if>
+      <if test="record.secondCategoryId != null">
+        second_category_id = #{record.secondCategoryId,jdbcType=INTEGER},
+      </if>
+      <if test="record.price != null">
+        price = #{record.price,jdbcType=DECIMAL},
+      </if>
+      <if test="record.publishStatus != null">
+        publish_status = #{record.publishStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.auditStatus != null">
+        audit_status = #{record.auditStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.weight != null">
+        weight = #{record.weight,jdbcType=REAL},
+      </if>
+      <if test="record.length != null">
+        length = #{record.length,jdbcType=REAL},
+      </if>
+      <if test="record.height != null">
+        height = #{record.height,jdbcType=REAL},
+      </if>
+      <if test="record.width != null">
+        width = #{record.width,jdbcType=REAL},
+      </if>
+      <if test="record.colorType != null">
+        color_type = #{record.colorType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productionDate != null">
+        production_date = #{record.productionDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.descript != null">
+        descript = #{record.descript,jdbcType=VARCHAR},
+      </if>
+      <if test="record.indate != null">
+        indate = #{record.indate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update sy_product_info
+    set product_id = #{record.productId,jdbcType=BIGINT},
+      product_name = #{record.productName,jdbcType=VARCHAR},
+      bar_code = #{record.barCode,jdbcType=VARCHAR},
+      brand_id = #{record.brandId,jdbcType=BIGINT},
+      first_category_id = #{record.firstCategoryId,jdbcType=INTEGER},
+      second_category_id = #{record.secondCategoryId,jdbcType=INTEGER},
+      price = #{record.price,jdbcType=DECIMAL},
+      publish_status = #{record.publishStatus,jdbcType=INTEGER},
+      audit_status = #{record.auditStatus,jdbcType=INTEGER},
+      weight = #{record.weight,jdbcType=REAL},
+      length = #{record.length,jdbcType=REAL},
+      height = #{record.height,jdbcType=REAL},
+      width = #{record.width,jdbcType=REAL},
+      color_type = #{record.colorType,jdbcType=VARCHAR},
+      production_date = #{record.productionDate,jdbcType=TIMESTAMP},
+      descript = #{record.descript,jdbcType=VARCHAR},
+      indate = #{record.indate,jdbcType=TIMESTAMP},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lmh.pojo.Product">
+    update sy_product_info
+    <set>
+      <if test="productName != null">
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="barCode != null">
+        bar_code = #{barCode,jdbcType=VARCHAR},
+      </if>
+      <if test="brandId != null">
+        brand_id = #{brandId,jdbcType=BIGINT},
+      </if>
+      <if test="firstCategoryId != null">
+        first_category_id = #{firstCategoryId,jdbcType=INTEGER},
+      </if>
+      <if test="secondCategoryId != null">
+        second_category_id = #{secondCategoryId,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="publishStatus != null">
+        publish_status = #{publishStatus,jdbcType=INTEGER},
+      </if>
+      <if test="auditStatus != null">
+        audit_status = #{auditStatus,jdbcType=INTEGER},
+      </if>
+      <if test="weight != null">
+        weight = #{weight,jdbcType=REAL},
+      </if>
+      <if test="length != null">
+        length = #{length,jdbcType=REAL},
+      </if>
+      <if test="height != null">
+        height = #{height,jdbcType=REAL},
+      </if>
+      <if test="width != null">
+        width = #{width,jdbcType=REAL},
+      </if>
+      <if test="colorType != null">
+        color_type = #{colorType,jdbcType=VARCHAR},
+      </if>
+      <if test="productionDate != null">
+        production_date = #{productionDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="descript != null">
+        descript = #{descript,jdbcType=VARCHAR},
+      </if>
+      <if test="indate != null">
+        indate = #{indate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where product_id = #{productId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lmh.pojo.Product">
+    update sy_product_info
+    set product_name = #{productName,jdbcType=VARCHAR},
+      bar_code = #{barCode,jdbcType=VARCHAR},
+      brand_id = #{brandId,jdbcType=BIGINT},
+      first_category_id = #{firstCategoryId,jdbcType=INTEGER},
+      second_category_id = #{secondCategoryId,jdbcType=INTEGER},
+      price = #{price,jdbcType=DECIMAL},
+      publish_status = #{publishStatus,jdbcType=INTEGER},
+      audit_status = #{auditStatus,jdbcType=INTEGER},
+      weight = #{weight,jdbcType=REAL},
+      length = #{length,jdbcType=REAL},
+      height = #{height,jdbcType=REAL},
+      width = #{width,jdbcType=REAL},
+      color_type = #{colorType,jdbcType=VARCHAR},
+      production_date = #{productionDate,jdbcType=TIMESTAMP},
+      descript = #{descript,jdbcType=VARCHAR},
+      indate = #{indate,jdbcType=TIMESTAMP},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where product_id = #{productId,jdbcType=BIGINT}
+  </update>
+  <resultMap id="productExpandMap" type="productExpand" extends="BaseResultMap">
+    <association property="brandName" column="brand_id" select="selectBrandById"/>
+  </resultMap>
+<!--分页查询商品  -->
+  <select id="queryProductByPages" resultMap="productExpandMap">
+    select
+    <include refid="Base_Column_List"/>
+    from sy_product_info
+    <trim prefix="where" prefixOverrides="and">
+      <if test="p.productName != null and p.productName!=''">
+        and product_name like concat("%",#{p.productName},"%")
+      </if>
+      <if test="p.firstCategoryId !=null">
+        and first_category_id=#{p.firstCategoryId}
+      </if>
+      <if test="p.brandId != null">
+        and brand_id=#{p.brandId}
+      </if>
+      <if test="p.secondCategoryId != null">
+        and second_category_id=#{p.secondCategoryId}
+      </if>
+    </trim>
+    limit #{page},#{limit}
+  </select>
+<!--关联查询查询品牌名  -->
+<select id="selectBrandById" resultType="String">
+  select brand_name from sy_brand_info where brand_id=#{brand_id}
+</select>
+<!--查询总条数  -->
+  <select id="queryCount" resultType="long">
+    select
+    count(1)
+    from sy_product_info
+    <trim prefix="where" prefixOverrides="and">
+      <if test="p.productName != null and p.productName!=''">
+        and product_name like concat("%",#{p.productName},"%")
+      </if>
+      <if test="p.firstCategoryId !=null">
+        and first_category_id=#{p.firstCategoryId}
+      </if>
+      <if test="p.brandId != null">
+        and brand_id=#{p.brandId}
+      </if>
+      <if test="p.secondCategoryId != null">
+        and second_category_id=#{p.secondCategoryId}
+      </if>
+    </trim>
+    limit #{page},#{limit}
+  </select>
+<!--随机查询一张图片  -->
+  <select id="selectPic" resultMap="com.lmh.mapper.ProductPictureMapper.BaseResultMap">
+    select * from sy_product_pic_info where product_id=#{pid} and is_master=1
+    ORDER BY RAND() LIMIT 0,1
+  </select>
+<!--批量删除商品-->
+  <delete id="deleteBatch">
+    delete  from sy_product_info
+    where product_id in
+    <foreach collection="ids" separator="," open="(" close=")" item="id">
+      #{id}
+    </foreach>
+
+  </delete>
+<!--删除主图相关-->
+  <delete id="deleteBatchPics">
+    delete  from sy_product_pic_info
+    where product_id in
+    <foreach collection="ids" separator="," open="(" close=")" item="id">
+      #{id}
+    </foreach>
+  </delete>
+</mapper>
